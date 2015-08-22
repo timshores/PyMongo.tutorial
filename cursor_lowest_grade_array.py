@@ -16,6 +16,7 @@ def remove_lowest():
         { '$match' : { 'scores.type' : 'homework' } },
         { '$sort' : { '_id' : pymongo.ASCENDING, 'scores.score' : pymongo.ASCENDING } }
     ]
+    # this aggregation treats each array element as a separate document
     cursor = students.aggregate(pipeline)
 
     student_id = -1;
