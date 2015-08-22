@@ -1,6 +1,7 @@
 import pymongo
 import sys
 
+# homework 2.2
 # establish a connection to the db
 connection = pymongo.MongoClient("mongodb://localhost")
 # get a handle to the g database
@@ -11,7 +12,7 @@ def remove_score(_id):
 
     try:
         doc = grades.find_one( { '_id' : _id } )
-        print "removing score ", doc['score'], " for student ", doc['student_id']
+        print "removing score ", doc['score'], " for student ", doc['_id']
         grades.remove( { "_id" : _id } )
 
     except Exception as e:
@@ -26,9 +27,9 @@ def remove_lowest():
 
     for item in cursor:
 
-        if (item['student_id'] != student_id):
+        if (item['_id'] != student_id):
             remove_score(item['_id'])
-        student_id = item['student_id']
+        student_id = item['_id']
 
 
 remove_lowest()
