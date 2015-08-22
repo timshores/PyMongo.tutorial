@@ -48,7 +48,7 @@ def blog_index():
 
     # todo: this is not yet implemented at this point in the course
 
-    return bottle.template('blog_template', dict(username=username))
+    return bottle.template( 'blog_template', dict(username = username) )
 
 
 
@@ -200,4 +200,3 @@ sessions = sessionDAO.SessionDAO(database)
 
 bottle.debug(True)
 bottle.run(host='localhost', port=8082)         # Start the webserver running and wait for requests
-

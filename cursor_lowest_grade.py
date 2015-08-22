@@ -3,36 +3,32 @@ import sys
 
 # establish a connection to the db
 connection = pymongo.MongoClient("mongodb://localhost")
+# get a handle to the g database
+db = connection.students
+grades = db.grades
 
-def lowest_grade():
-
-# get a handle to the reddit db
-    db = connection.students
-    grades = db.grades
-
-    print "Seeking lowest grade for each student."
-    query = {}
+def remove_score(_id):
 
     try:
-        cursor = grades.find(query)
+        doc = grades.find_one( { '_id' : _id } )
+        print "removing score ", doc['score'], " for student ", doc['student_id']
+        grades.remove( { "_id" : _id } )
 
     except Exception as e:
         print "Unexpected error: ", type(e), e
+        raise
 
-    current = 0
-    for doc in cursor:
-        low_score = 10000
-        if current == doc.student_id:
-            for doc in cursor:
-                if doc.type == "homework":
-                    if low_score > doc.score:
-                        low_score = doc.score
-                        low_id = _id
+def remove_lowest():
 
+    cursor = grades.find( { 'type' : 'homework' } ).sort( [ ( 'student_id', pymongo.ASCENDING ), ( 'score', pymongo.ASCENDING ) ] )
 
+    student_id = -1;
 
-        else:
-            current = doc.student_id
+    for item in cursor:
+
+        if (item['student_id'] != student_id):
+            remove_score(item['_id'])
+        student_id = item['student_id']
 
 
-lowest_grade()
+remove_lowest()
