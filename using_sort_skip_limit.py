@@ -1,6 +1,7 @@
 import pymongo
 import sys
 
+# homework 2.2
 # establish a connection to the db
 connection = pymongo.MongoClient("mongodb://localhost")
 

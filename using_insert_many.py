@@ -4,13 +4,13 @@ import sys
 # establish a connection to the db
 connection = pymongo.MongoClient("mongodb://localhost")
 
-def insert():
+def insert_many():
 
-# get a handle to the reddit db
-    db = connection.test
+# get a handle to the school db
+    db = connection.school
     people = db.people
 
-    print "insert, reporting for duty"
+    print "insert_many, reporting for duty"
 
     richard = { "name" : "Richard Kreuter", "company" : "MongoDB",
                 "interests" : ['horses', 'skydiving', 'fencing']}
@@ -18,14 +18,25 @@ def insert():
                 "company" : "MongoDB", "interests" : ['running', 'cycling',
                 'photography']}
 
+    people_to_insert = [andrew,richard]
+
     try:
-        people.insert_one(richard)
-        people.insert_one(andrew)
+        people.insert_many(people_to_insert, ordered = True)
 
     except Exception as e:
         print "Unexpected error: ", type(e), e
 
-    print(richard)
-    print(andrew)
+def print_people():
+    db = connection.school
+    people = db.people
 
-insert()
+    cur = people.find({}, {'name':1})
+    for doc in cur:
+        print doc
+
+
+print "Before the insert_many, here are the people"
+print_people()
+insert_many()
+print "\n\nAfter the insert_many, here are the people"
+print_people()
